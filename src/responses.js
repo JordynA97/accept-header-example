@@ -1,4 +1,4 @@
-const fs = require('fs');  // pull in the file system module
+const fs = require('fs'); // pull in the file system module
 
 const index = fs.readFileSync(`${__dirname}/../client/client.html`);
 
@@ -10,6 +10,25 @@ const respond = (request, response, content, type) => {
 
 const getIndex = (request, response) => {
   respond(request, response, index, 'text/html');
+};
+
+const getCats = (req, res, acceptedType) => {
+  const cat = {
+    name: 'mr. cat',
+    age: 3,
+  };
+
+  if(acceptedType[0] === 'text/xml'){
+    let responseXML = '<response>';
+    responseXML = `${responseXML} <name>${cat.name}</name>`;
+    responseXML = `${responseXML} <age>${cat.age}</age>`;
+    responseXML = `${responseXML} </response>`;
+
+    return respond(req,res, responseXML, 'text/xml');
+  }
+  
+  const catString = JSON.stringify(cat);
+  return respond(req,res,catString, 'application/json');
 };
 
 module.exports = {
